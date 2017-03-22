@@ -1,0 +1,41 @@
+---
+title: "P1: Test a Perceptual Phenomenon"
+author: "Qingyu Li"
+date: "February 14, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+1.The independent variable of this problem is whether a word is congruent or not. The dependent variable is the response time for each condition.
+
+2. An Appropriate set of hypothesis for this task would be to test whether the average response time for congruent words is the same as incongruent words. The null hypothesis is: the average response time for congruent words is the same as that of incongruent words. The alternative hypothesis is: the average response time for congruent words is different from the average response time of incongruent words.
+
+3. Descriptive Statistics of the dataset
+
+```{r perceptual}
+resptime=read.csv(file='stroopdata.csv',header=TRUE)
+summary(resptime)
+```
+The mean response time for congruent cases is 14.05 second while that of incongruent cases is 22.02. The time range for congruent cases is 13.7 seconds while that for incongruent cases is 19.57. The IQR for congruent cases is 4.3 while the IQR for incongruent cases is 5.33.
+
+
+
+```{r , echo=FALSE}
+boxplot(resptime)
+```
+
+
+The boxplot visually shows the min, max, median of response time by group. We can see that the distance bewteen minimum and maximum whiskers of congruent group is wider thatn that of incongruent group. In addition, for incongruent cases, there are two data points that might be outliers. 
+
+
+```{r , echo=FALSE}
+library(ggplot2)
+ggplot(data=resptime,aes(x=Congruent))+geom_histogram(fill="blue")+labs(x="Response time for Congruent cases",y="Count")
+
+```
+
+
