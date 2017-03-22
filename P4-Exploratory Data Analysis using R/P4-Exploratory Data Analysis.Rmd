@@ -1,0 +1,579 @@
+---
+title: 'P4: Exploratory Analysis of Prosper Loan Data'
+author: "Qingyu Li"
+date: "March 12, 2017"
+output: html_document
+---
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width=80)
+```
+
+In this analysis we will look at the Prosper Loans Dataset.
+This data set contains 113,937 loans with 81 variables on each loan, including loan amount, borrower rate (or interest rate), current loan status, borrower income, borrower employment status, borrower credit history, and the latest payment information. We would like to find some interesting insights through this analysis:Is there any particular reason why people make loans? What characteristics do borrowers have in common? What character influence borrower's APR?
+
+## 1. Import Data
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(gridExtra)
+library(reshape2)
+library(dplyr)
+library(maps)
+```
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+df<-read.csv('prosperLoanData.csv',sep=',',na.strings=c("","NA"))
+```
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+str(df)
+```
+
+We first check out the structure of this dataset and can see that there are a lot of data and variables.In the next section, we will clean the dataset and create a tidy version for future analysis.
+
+
+## 2. Data Cleaning
+
+1. Check duplicates in the dataset. 
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+length(which(duplicated(df$LoanNumber)==TRUE))
+```
+
+By checking if there are duplicated LoanNumber, we see that there are 871 duplicates in this dataset and we will remove them in the cleaning process.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+df_cleaned1<-df[!duplicated(df$LoanNumber),]
+names(df_cleaned1)[names(df_cleaned1)==
+                     "ListingCategory..numeric."]<-"ListingCategory"
+names(df_cleaned1)[names(df_cleaned1)==
+                     "ProsperRating..Alpha."]<-"ProsperAlpha"
+names(df_cleaned1)[names(df_cleaned1)==
+                     "ProsperRating..numeric."]<-"Prospernum"
+```
+
+
+2. Looking at the variables, we noticed that there are several loan keys(ListingKey, LoanKey,LoanNumber,ListingNumber, etc.) in the dataset that will not be helpful in future analysis, we remove them from the dataset and only keep the LoanNumber as an unique identifier for each loan.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+dropvar<-names(df_cleaned1) %in% 
+  c("ListingKey","LoanKey",
+  "ListingNumber","MemberKey","GroupKey")
+df_cleaned2<-df_cleaned1[!dropvar]
+```
+
+3. we found that there are a lot of date time variables in the dataset and we would like to separate the year and month.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+Listingdate=substr(df_cleaned2$ListingCreationDate,1,10)
+
+Firstcreditdate=substr(df_cleaned2$FirstRecordedCreditLine,1,10)
+
+Origindate=substr(df_cleaned2$LoanOriginationDate,1,10)
+
+Originquarter=substr(df_cleaned2$LoanOriginationQuarter,1,2)
+
+Closingdate=substr(df_cleaned2$ClosedDate,1,10)
+
+LStatus=substr(df_cleaned2$LoanStatus,1,9)
+
+df_cleaned3<-data.frame(df_cleaned2,Listingdate, 
+                        Firstcreditdate,Origindate,
+                        Originquarter, Closingdate,LStatus)
+
+dropvar<-names(df_cleaned3) %in% c("ListingCreationDate","DateCreditPulled",
+                                   "FirstRecordedCreditLine", "LoanOriginationDate",
+                                   "LoanOriginationQuarter","ClosedDate","LoanStatus")
+
+df_cleaned4<-df_cleaned3[!dropvar]
+```
+
+4. When browsing the variables, we noticed the categories for employment status are somewhat confusing. There are people with a job are categorized as "Employed" and some are categorized into "Full-time" or "Part-time". We will unify the category as "Employed" in the below code.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+
+for (i in 1:nrow(df_cleaned4)){
+  if (is.na(df_cleaned4[i,"EmploymentStatus"])) 
+  
+    df_cleaned4[i,"EmploymentStatus"]=="Not Available"   
+  
+  else if (df_cleaned4[i,"EmploymentStatus"]=="Full-time" )
+    
+    df_cleaned4[i,"EmploymentStatus"]="Employed"
+  
+  else if (df_cleaned4[i,"EmploymentStatus"]=="Part-time" )
+    
+    df_cleaned4[i,"EmploymentStatus"]="Employed"
+  else next
+}
+```
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+mydata=df_cleaned4
+```
+
+## 3. Data Exploration
+### 3.1 Characteristics of Borrowers
+
+
+First we would like to explore the characteristics of borrowers who initiated the loan listing: why they need to make the loan? Where are they from?
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+Listing.f=factor(mydata$ListingCategory,
+                 labels=c("Not Available","Debt Consolidation","Home Improvement",
+                          "Business","Personal Loan","Student Use",
+                          "Auto","Other","Baby&Adoption","Boat","Cosmetic Procedure",
+                          "Engagement Ring","Green Loans","Hosehold Expenses",
+                          "Large Purchases","Medical/Dental","Motorcycle","RV",
+                          "Taxes","Vacation","Wedding Loans"))
+
+mydata=data.frame(mydata, Listing.f)
+ggplot(mydata)+
+  aes(x=Listing.f,y=..count../sum(..count..))+
+  geom_bar()+
+  labs(x="Listing Category",y="Percent")+
+  theme(axis.text.x=element_text(angle=60,hjust=1))
+
+```
+
+
+
+From the above plot, we can see that over 50% of the loans are for debt consolidation purpose.
+
+
+Now we understand why these borrowers make loans, we are wondering which states they are from.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+state <- map_data("state") 
+states<-data.frame(table(mydata$BorrowerState))
+colnames(states)<-c("State","Count")
+states$region <- tolower(state.name[match(states$State,  state.abb)])
+map.df<-inner_join(state,states,by="region")
+```
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(map.df,aes(x=long, y = lat, group = group))+
+  geom_polygon(aes(fill=Count))+
+  geom_path()+
+  scale_fill_gradientn(colours=rev(heat.colors(12)))
+```
+
+
+This plot shows that residents from California made up the most of the borrowers. The next several states with large number of borrowers are Illinois, Texas, Florida and New York. In addition, we noticed that we have more borrowers from the east coast in general compared to the west coast.
+
+Next, we would like to investigate borrower characters regarding their employment, income and credit history.
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(mydata)+
+  aes(x=IncomeRange,y=..count../sum(..count..))+
+  geom_bar()+
+  labs(x="Income Bracket",y="Percent")+
+  theme(axis.text.x=element_text(angle=60,hjust=1))
+```
+
+
+From above plot, we can see that about 29% of borrowers have income within the $25,000-$49,000 range. and about 28% of borrowers have income within $50,000-$74,999 range.This pattern is also shown in the Income by Employment heatmap.
+
+We also calculate the descriptive statistics of borrower's monthly income:
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+summary(mydata$StatedMonthlyIncome)
+```
+
+We noticed that the max monthly income is 1750000. The IQR is $3626 and 3rd Quartile+1.5*IQR=12264. So there are definitely some outliers in the stated monthly income.
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x=EmploymentStatus,y=..count../sum(..count..)),data=mydata)+
+  geom_bar()+
+  labs(y="Percent")+
+  theme(axis.text.x=element_text(angle=60,hjust=1))
+summary(mydata$EmploymentStatus)
+```
+
+
+We can also see that 80% of the borrowers in this dataset are employed either with full-time or part-time employment. 
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+qplot(x=DebtToIncomeRatio,y=..count../sum(..count..), data=subset(mydata,!is.na(DebtToIncomeRatio)),
+       geom='freqpoly')+
+  scale_x_continuous(lim=c(0,1))+
+  ylab("Percent")
+summary(mydata$DebtToIncomeRatio)
+```
+
+
+Regarding debt to income ratio, we can see that most borrowers have debt amount about 24% of their income.
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x=BankcardUtilization,y=..count../sum(..count..)),data=mydata)+
+  geom_bar(binwidth=0.1)+
+  scale_x_continuous(limits = c(0,1))+
+  labs(y="Percent")
+
+summary(mydata$BankcardUtilization)
+```
+
+
+The plot for bank card utilization shows that more than half of the borrowers have revolving credit utilized of more than 50% at the time of credit pull.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x=TotalCreditLinespast7years,y=..count../sum(..count..)),data=mydata)+
+  geom_histogram(binwidth=10)+
+  scale_x_continuous(limits = c(0,80))+
+  labs(y="Percent")
+
+summary(mydata$TotalCreditLinespast7years)
+```
+
+
+ Regarding total credit lines for the past 7 years, 30% of the borrowers have 20 credit lines.
+ 
+ 
+Since the data provides a lower bond and upper bond for credit score, we will calculate the average of the two as a proxy for borrower's credit score.
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+avg_credit_score=(mydata$CreditScoreRangeLower+mydata$CreditScoreRangeUpper)/2
+mydata<-data.frame(mydata,avg_credit_score)
+
+ggplot(aes(x=avg_credit_score,y=..count../sum(..count..)),data=mydata)+
+  geom_histogram(binwidth=18)+
+  scale_x_continuous(limits = c(400,850))+
+  labs(y="Percent")
+
+summary(mydata$avg_credit_score)
+
+```
+
+
+The above histogram of average credit score shows that the majority of the borrower's average credit score is between 650 to 700. The mean of the credit score is 695. We notice that the minimum here is 9.5 and max is 889.5. Since the minimum score can only be 300 and maximum achivable possible score is 850, these outliers should probably not be included in future analysis.
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(aes(x=BorrowerAPR,y=..count../sum(..count..)),data=mydata)+
+  geom_histogram()+
+  scale_x_continuous(limits = c(0,.5))+
+  labs(y="Percent")
+
+summary(mydata$BorrowerAPR)
+```
+
+This histogram shows that the most borrowers have APR between 15% to 25% with mean of 21.9%. The max APR of borrower even hit 51.23% while minimum APR is only 0.6543%.
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data=subset(mydata,!is.na(DelinquenciesLast7Years)))+
+  aes(x=DelinquenciesLast7Years,y=..count../sum(..count..))+
+  geom_bar()+
+  scale_x_discrete(limits=c(0,75))+
+  labs(y="Percent")
+
+summary(mydata$DelinquenciesLast7Years)
+```
+
+
+For number of delinquencies for the past 7 years, we noticed that there are a large number of borrowers who did not have any delinquencies in the past 7 years. The summary table shows that the average delinquency is about 4 times, with minimum 0 times and maximum 99 times.
+
+In the plot below, we remove the borrowers with 0 delinquencies in the past 7 year and plot the distribution of people with delinquencies. 
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data=subset(mydata,!is.na(DelinquenciesLast7Years) & 
+                     DelinquenciesLast7Years>0))+
+  aes(x=DelinquenciesLast7Years,y=..count../sum(..count..))+
+  geom_bar()+
+  scale_x_continuous(breaks=seq(0,100,10))+
+  labs(x="Number of Delinquencies in the Past 7 years",y="Percent")
+
+```
+
+
+We can see that there are a lot of people have delinquencies less than 5 time in the past year. However, the distribution also shows a very long tail and there are borrower who have almost 100 times of account delinquencies in the past 7 years.
+
+
+Next, we would like to explore some correlations between two variables.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+qplot(EmploymentStatus,avg_credit_score,
+      data=subset(mydata,!is.na(EmploymentStatus)),
+      geom="boxplot")+
+  theme(axis.text.x=element_text(angle=60,hjust=1))
+```
+
+
+When checking the relationship of employment status with average credit score, we noticed that the range of average credit score for employed borrowers is the smallest. The range of average credit score for retired and self-employed tend to be larger as expected.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+credit_group=group_by(mydata,avg_credit_score)
+mydata.income=summarise(credit_group,
+          income.mean=mean(StatedMonthlyIncome),
+          income.median=median(StatedMonthlyIncome),
+          n=n())
+
+ggplot(mydata.income)+
+  aes(y=avg_credit_score,x=income.mean)+
+  geom_point(aes(size=n))+
+  ylim(400,900)+
+  xlim(2000,10000)+
+  geom_smooth(method='lm',color='red')+
+  labs(y="Average Credit Score",
+       x="Average Stated Monthly Income ($)")
+```
+
+
+The above plot shows the relationship between borrowers' stated monthly income and their average credit score. We can see that with higher stated monthly income, the average credit score also tend to be higher. 
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+
+mydata.apr_by_credit=summarise(credit_group,
+          apr.mean=mean(BorrowerAPR),
+          apr.median=median(BorrowerAPR),
+          n=n())
+mydata.apr_by_credit<-arrange(mydata.apr_by_credit,avg_credit_score)
+
+ggplot(mydata.apr_by_credit)+
+  aes(y=apr.mean,x=avg_credit_score)+
+  geom_point()+
+  xlim(300,900)+
+  labs(y="Average Borrower's APR")
+```
+
+This scatter plot shows the correlation between average credit score of a borrower and his/her APR. We can see that when average credit score is between 400 to 630 points, the borrower's APR ranges between 25% to 27.5%. When credit score is higher than 630, as it becomes higher, the borrower's APR becomes lower.
+
+
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(mydata)+
+  aes(x=BorrowerAPR,y=..count../sum(..count..),
+      fill=IsBorrowerHomeowner)+
+  geom_histogram(alpha=.5)+
+  labs(y="Percent")
+
+```
+
+The plot display the relationship of borrower's APR and home ownership. The histogram in blue is the distribution for home owners while the histogram in red is the distribution for non-home owners. We can see that being a home owner does not really affect the APR of a borrower. The majority borrowers' APR is 18% for both homeowners and non-homeowners.
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+utilization_group=group_by(mydata,BankcardUtilization)
+mydata.utilization_by_apr=summarise(utilization_group,
+          apr.mean=mean(BorrowerAPR),
+          apr.median=median(BorrowerAPR),
+          n=n())
+
+ggplot(mydata.utilization_by_apr)+
+  aes(x=BankcardUtilization,y=apr.mean)+
+  geom_point()+
+  geom_smooth(method='lm',color='red')+
+  xlim(0,1)
+```
+
+
+We can see that there is a clear positive relationship between average bank utilization and borrower's APR. That is, the higher a borrower's bank utilization, the higher their APR will be.
+
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+delinquency_group=group_by(mydata,DelinquenciesLast7Years)
+mydata.delinquency_by_apr=summarise(delinquency_group,
+          apr.mean=mean(BorrowerAPR),
+          apr.median=median(BorrowerAPR),
+          n=n())
+
+ggplot(mydata.delinquency_by_apr)+
+  aes(x=DelinquenciesLast7Years,y=apr.mean)+
+  geom_smooth(method='lm',color='red')+
+  geom_point(aes(size=n))+
+  labs(y="Average of Borrower's APR")
+```
+
+
+In the above plot, we see that with more delinquencies in credit history, the borrower's APR tend to be higher. The size of the point indicate the number of borrowers with that certain number of delinquencies in the past 7 years. 
+
+
+
+### 3.2 Linear model for predicting borrower's APR
+Here we randomly split the data into training and test sample. We use training sample to fit a linear model with the variables we just explored and use the test sample to test the fitness of our model.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+set.seed(422)
+mydata1=subset(mydata, !is.na(EmploymentStatus) &
+                 (EmploymentStatus!="Not available") & 
+                 !is.na(DelinquenciesLast7Years)&
+                 !is.na(BankcardUtilization) & 
+                 !is.na(DebtToIncomeRatio))
+n=nrow(mydata1)
+train.index=sample(1:n, size=round(0.7*n),replace=FALSE)
+
+train=mydata1[train.index,]
+test=mydata1[-train.index,]
+
+loan.lm=lm(BorrowerAPR~StatedMonthlyIncome+avg_credit_score+
+             BankcardUtilization+DelinquenciesLast7Years+factor(EmploymentStatus)+
+             DebtToIncomeRatio+TotalCreditLinespast7years,data=train)
+
+summary(loan.lm)
+```
+
+
+From the summary, we can see that all the variables are significant predictor of borrower's APR. We can write the model as follow:
+
+BorrowerAPR=0.6442-0.000001149\*StatedMonthlyIncome-0.0006324\*Average Credit Score+ 0.02423\*Bank Card Utilization+0.0004672\*Number of Delinquencies in Past 7 years-0.0785 \*Not Employed+ 0.02693\*Other-0.01479 \*Retired-0.04728\*Self-employed  +0.007543\*Debt To Income Ratio + 0.02496 \* Total Credit Lines Past 7 years
+
+From the model, we can see that as monthly income increase $1000, borrower's APR will decrease by 0.6324. With 0.1 increase in bank card utilization, borrower APR will increase by 0.002423. With one more delinquency in the past 7 years, borrowers APR will increase 0.0004672. Since in the model we use employed as the base factor for employment status. When a borrower is not employed, the APR will decrease by 0.0785, and if the borrower is self-employed, the APR will decrease by 0.04728. If a borrower is retired instead of being employed, the APR will decrease by 0.01479 while if the employment status of the borrower is other then the APR will increase 0.02693. With 1 percent increase in debt to income ratio, APR will increase 0.007543 and with one more credit line increase the past 7 years APR will increase by 0.02496.
+
+The R-squared of this model is 0.2829, which means that 28.29% of the variability can be explained by the model.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+pred=predict(loan.lm, test)
+mean((pred-test$BorrowerAPR)^2)
+```
+
+We use the variables from test set to predit their borrower APR and calculate the Mean Standard Error(MSE) = 0.004623. 
+
+
+### 3.3 Characteristics of Loans
+In this section, we check the status of the loan listings.
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+p1=ggplot(aes(x=LStatus,y=..count../sum(..count..)),data=mydata)+
+  theme(axis.text.x=element_text(angle=60,hjust=1))+
+  geom_bar()+
+  labs(y="Percent")
+p2=ggplot(aes(x=Originquarter,y=..count../sum(..count..)),data=mydata)+
+  geom_bar()+
+  labs(y="Percent")
+p3=ggplot(mydata)+
+  aes(x=LoanOriginalAmount,y=..count../sum(..count..))+
+  geom_histogram()+
+  labs(y="Percent")+
+  geom_vline(aes(xintercept=mean(LoanOriginalAmount)),
+             color="red", linetype="dashed", size=1)
+mydata$Term <- factor(mydata$Term, levels=c(12,36,60), ordered=TRUE)
+p4=ggplot(mydata)+aes(x=Term,y=..count../sum(..count..))+
+  geom_bar()+
+  labs(y="Percent")
+grid.arrange(p1,p2,p3,p4,ncol=2)
+```
+
+
+
+This plot shows that the majority of loans are still current and more loans are originated in the first and fourth quarter.About 5% of the loans are defaulted and 3% are past due. Regarding the amount of money borrowed, we can see that about 25% of the loan is around \$5,000. The average amount for original loan amount is \$8,000 and could take up to \$30,000. For the loan term, 80% of the loans have term of 36 month.
+
+Next, we look at the loans from investors perspective:
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(mydata)+
+  aes(x=Investors,y=..count../sum(..count..))+
+  geom_histogram(binwidth=10)+
+  xlim(-1,500)+
+  ylim(0,.1)+
+  geom_vline(aes(xintercept=mean(Investors)),color="red", 
+             linetype="dashed", size=1)+
+  labs(y="Percent")
+```
+
+
+
+We plot the number of investors for each loan listing and we found that most loans have investor numbers less than 50. Since there's a long tail in this histogram, the average investor number is 80.
+
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(mydata)+
+  aes(x=LenderYield,y=..count../sum(..count..))+
+  geom_histogram(binwidth=.02)+
+  labs(y='Percent')
+
+summary(mydata$LenderYield)
+```
+
+
+The histogram shows that the majority of lender's yield is between 10% to 20%.
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(mydata)+
+  aes(x=LenderYield,y=BorrowerAPR)+
+  geom_point()
+grid.arrange(p1,p2,ncol=2)
+```
+
+
+
+The lender yield and borrower's APR scatterplot shows the positive relationship between the two variable. The higher the borrower's APR, the higher the lender's yield.
+
+
+## 4. Final Plots and Summary
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+mydata.income=summarise(credit_group,
+          income.mean=mean(StatedMonthlyIncome),
+          income.median=median(StatedMonthlyIncome),
+          n=n())
+
+ggplot(mydata.income)+
+  aes(y=avg_credit_score,x=income.mean)+
+  geom_point(aes(size=n))+
+  ylim(400,900)+
+  xlim(2000,10000)+
+  geom_smooth(method='lm',color='red')+
+  labs(title="Borrower's Stated Monthly Income by Average Credit Score",
+       y="Average Credit Score",
+       x="Average Stated Monthly Income ($)",
+       size="Number of Borrower")
+```
+
+
+In this plot, we examine the relationship between borrower's credit score and their monthly income. We claculated borrower's average credit score by taking the mean of their upper credit line and lower credit line. Here we see that borrower's credit score do have a positive relationship with their monthly income. In other words, the higher their mothly income, the higher their credit score tend to be. We also use the size of the scatter point as a proxy for the number of borrowers in each income and credit score combineation. We can see that the majority of the borrowers have monthly income around $6,000 and with average credit score of 700.
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(mydata.delinquency_by_apr)+
+  aes(x=DelinquenciesLast7Years,y=apr.mean)+
+  geom_smooth(method='lm',color='red')+
+  geom_point(aes(size=n))+
+  labs(title="Borrower's APR by number of Delinquencies",
+       x="Number of Delinquencies in the Past 7 years",
+       y="Average of Borrower's APR", 
+       size="Number of Borrower")
+  
+```
+
+
+We can see that with more delinquencies in a borrower's credit history, his/her APR tend to be higher.We can see that most borrowers don't have delinquencies in the past 7 years and their APR is also very low. We also notice that for borrowers with delinquencies, most of them have less than 75 for the past 7 years. And their borrower's APR is more closely spreaded around the smoothed line. For borrowers with more delinquencies, the general trend is that they tend to have higher APR. However, those points are more spreaded out and their APR can range anywhere from 22.5% to 30%. This is very interesting and we can possibly test the significance of interaction between number of delinquencies and some other variables in regression.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+qplot(EmploymentStatus,avg_credit_score,
+      data=subset(mydata,!is.na(EmploymentStatus)& 
+                    (EmploymentStatus !="Not available") & 
+                    (EmploymentStatus != "Other")),
+      geom="boxplot")+
+  theme(axis.text.x=element_text(angle=60,hjust=1))+
+  labs(title="Average Credit Score by Employment Status",
+       x="Employment Status",
+       y="Average Credit Score")
+  
+```
+
+
+The final plot is a boxplot regarding employment status by average credit score.Since the data dictionary did not provide explanation about status "Other", we removed some of these borrowers when making this boxplot together with NAs and "Not Available" ones.
+
+As previously pointed out, the range of average credit score for employed borrowers is the smallest. Although there are some outliers for employed borrowers, 50% of the borrowers' average credit score falls in the 650 to 750 range. However, the median score for employed borrowers is only about 680, which is about the same as that of retired group and lower than that of self-employed group and not employed group.
+
+For other groups, We see that the IQR for retired borrowers is the greatest of 200 points. The range of average credit score for retired and self-employed tend to be larger as expected.
+
+
+## 5. Reflection 
+In this analysis, we explored the characteristics of the borrowers, investors and loan listings from Prosper Loan dataset. We can see that the majority loan listing was for debt consolidation purpose and a lot of the borrowers are from California, Illinois, Texas, Florida and New York. Regarding income and employment status, we noticed that most borrowers are employed (full-time or part-time) and earn between \$25,000 to \$74,999 a year. 
+
+When exploring factors that influence borrower's APR, we examined borower's stated monthly income, their credit score, bank card utilization rate and delinquencies in the past 7 years. The relationship between these variables and borrow's APR are as expected: stated monthly income, bank utilization rate and number of delinquencies in past 7 years are positively related with borrower's APR while average credit score and borrower's APR are negatively correlated. 
+
+Regarding characteristics of the loans, we learned that about 50% of the loan listings are current and 35% percent are completed loans. 80% of the loans have 36 months term and average loan original amount is around $8,000. For number of investors per loan listing, we found that the majority loans have less than 50 investors and most loans have lender yield between 10%-20%. We have also seen that the higher borrower's APR, the more lender's yield. 
+Thoughout this project, I spent a lot of time to plan the flow of my analysis and draw the plots as desired. I was not previously very familiar with the gglot package, heatmaps and other plotting tools. But after all the videos and this project, I am more confident in R visualization than before. In the future, we can explore other models with these data and try to improve the predicting power of our model built in section 3.2.
+
+
+## 6. Reference
+http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
+
