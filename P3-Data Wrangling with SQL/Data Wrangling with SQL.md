@@ -11,6 +11,7 @@ I have lived in Chicago city for two years now and I would like to learn more ab
 
 After downloading the osm data, which is about 2G, we created a sample set of 
 
+'''python
 defaultdict(set,
             {'59': {'S IL State Route 59'},
              'Ave': {'Arkansas Ave', 'Deleware Ave', 'Meridian Ave'},
@@ -49,6 +50,7 @@ defaultdict(set,
              'Way': {'Woodridge Way'},
              'West': {'North Lincoln Park West'},
              'roosevelt': {'roosevelt'}})
+'''
 
 We can see that there are a lot of inconsistencies in the way street is recorded:
    - Street names with suite numbers. Example: Renaissance Drive #103
