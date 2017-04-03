@@ -1,6 +1,6 @@
-## AB Test Whether to Launch Free Trial Screener for Udacity Enrollment Page
+# AB Test Whether to Launch Free Trial Screener for Udacity Enrollment Page
 
-### Experiment Overview
+## Experiment Overview
 At the time of this experiment, Udacity courses currently have two options on the home page: "start free trial", and "access course materials". If the student clicks "start free trial", they will be asked to enter their credit card information, and then they will be enrolled in a free trial for the paid version of the course. After 14 days, they will automatically be charged unless they cancel first. If the student clicks "access course materials", they will be able to view the videos and take the quizzes for free, but they will not receive coaching support or a verified certificate, and they will not submit their final project for feedback.
 
 In the experiment, Udacity tested a change where if the student clicked "start free trial", they were asked how much time they had available to devote to the course. If the student indicated 5 or more hours per week, they would be taken through the checkout process as usual. If they indicated fewer than 5 hours per week, a message would appear indicating that Udacity courses usually require a greater time commitment for successful completion, and suggesting that the student might like to access the course materials for free. At this point, the student would have the option to continue enrolling in the free trial, or access the course materials for free instead. 
@@ -14,22 +14,22 @@ The unit of diversion is a cookie, although if the student enrolls in the free t
 First we need to determine the metrics to measure and their expected results.
 
 ##### Invariant metrics
-Number of cookies
-Number of clicks
-Click through probabiliy
+-Number of cookies
+-Number of clicks
+-Click through probabiliy
 
 ##### Evaluation metrics
-Gross Conversion
-Retention
-Net Conversion
+-Gross Conversion
+-Retention
+-Net Conversion
 
 
-### Measuring Standard Deviation
+#### Measuring Standard Deviation
 List the standard deviation of each of your evaluation metrics. (These should be the answers from the "Calculating standard deviation" quiz.)
 
 For each of your evaluation metrics, indicate whether you think the analytic estimate would be comparable to the the empirical variability, or whether you expect them to be different (in which case it might be worth doing an empirical estimate if there is time). Briefly give your reasoning in each case.
 
-### Sizing
+#### Sizing
 #### Number of Samples vs. Power
 Indicate whether you will use the Bonferroni correction during your analysis phase, and give the number of pageviews you will need to power you experiment appropriately. (These should be the answers from the "Calculating Number of Pageviews" quiz.)
 
