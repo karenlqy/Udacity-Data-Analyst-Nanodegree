@@ -37,11 +37,15 @@ We expect net conversion to increase for the testing group with less students to
 
 Since we need a sample of unique cookies of 5,000 and the unique cookies to view Udacity page per day is 40,000. We are using 12.5% of the daily unique cookies as our sample. So the number of unique cookies that start the free trial per day for our sample is 3200 \*12.5% = 400 and the number of enrollment per day is 660 \*12.5%=82.5. 
 
- Gross Conversion
+The standard deviation of the three evaluation metrics are as follows:
+
+Evaluation Metrics | Probability | Standard Deviation
+-------------------|-------------|-------------------
+ Gross Conversion | 0.20625 |0.02023
+ Retention | 0.53 | 0.05495
+ Net Conversion | 0.10931 | 0.0156
  
- Retention
  
- Net Conversion
 
 
 ### Sizing
