@@ -9,27 +9,36 @@ The hypothesis was that this might set clearer expectations for students upfront
 
 The unit of diversion is a cookie, although if the student enrolls in the free trial, they are tracked by user-id from that point forward. The same user-id cannot enroll in the free trial twice. For users that do not enroll, their user-id is not tracked in the experiment, even if they were signed in when they visited the course overview page.
 
-### Experiment Design
-#### Metric Choice
+## Experiment Design
+### Metric Choice
 First we need to determine the metrics to measure and their expected results.
 
-##### Invariant metrics
--Number of cookies
--Number of clicks
--Click through probabiliy
+#### Invariant metrics
+Invariant metrics are variables that are tend to have big difference between the test and control group.
+-Number of cookies: The number of unique cookies to view the course overview page.
+-Number of clicks: The number of users who enroll in the free trial.
+-Click through probabiliy: The number of unique cookies to click the "Start free trial" button divided by number of unique cookies to view the course overview page. 
 
-##### Evaluation metrics
--Gross Conversion
--Retention
--Net Conversion
+Since visitors of the website did not view the screen asking if they can spend at least 5 hours per week at this point, these variables should not be affected by adding the screener. Thus these metrics should be the same for case and control group.
+
+#### Evaluation metrics
+-Gross Conversion: The number of user-ids to complete checkout and enroll in the free trial divided by number of unique cookies to click the "Start free trial" button.
+-Retention: The number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by number of user-ids to complete checkout.
+-Net Conversion: The number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the "Start free trial" button. 
+
+We expect gross conversion rate to be lower for testing group. With number of clicks be the same across groups, we expect the number of user-ids to decrease when the screening page eliminate visitors who cannot study enough time every week and potentially cancel the service. 
+
+We expect retention rate to increase for testing group. With similar visitors enrolled in free trial in the test and control group, the screening page will likely to filter out students who are more likely to cancel in the future and thus increase the retention rate.
+
+We expect net conversion to increase for the testing group with less students to cancel past the free trial period and more stay enrolled.
 
 
-#### Measuring Standard Deviation
+### Measuring Standard Deviation
 List the standard deviation of each of your evaluation metrics. (These should be the answers from the "Calculating standard deviation" quiz.)
 
 For each of your evaluation metrics, indicate whether you think the analytic estimate would be comparable to the the empirical variability, or whether you expect them to be different (in which case it might be worth doing an empirical estimate if there is time). Briefly give your reasoning in each case.
 
-#### Sizing
+### Sizing
 #### Number of Samples vs. Power
 Indicate whether you will use the Bonferroni correction during your analysis phase, and give the number of pageviews you will need to power you experiment appropriately. (These should be the answers from the "Calculating Number of Pageviews" quiz.)
 
@@ -38,26 +47,26 @@ Indicate what fraction of traffic you would divert to this experiment and, given
 
 Give your reasoning for the fraction you chose to divert. How risky do you think this experiment would be for Udacity?
 
-### Experiment Analysis
+## Experiment Analysis
 Sanity Checks
 For each of your invariant metrics, give the 95% confidence interval for the value you expect to observe, the actual observed value, and whether the metric passes your sanity check. (These should be the answers from the "Sanity Checks" quiz.)
 
 For any sanity check that did not pass, explain your best guess as to what went wrong based on the day-by-day data. Do not proceed to the rest of the analysis unless all sanity checks pass.
 
-### Result Analysis
-#### Effect Size Tests
+## Result Analysis
+### Effect Size Tests
 For each of your evaluation metrics, give a 95% confidence interval around the difference between the experiment and control groups. Indicate whether each metric is statistically and practically significant. (These should be the answers from the "Effect Size Tests" quiz.)
 
-#### Sign Tests
+### Sign Tests
 For each of your evaluation metrics, do a sign test using the day-by-day data, and report the p-value of the sign test and whether the result is statistically significant. (These should be the answers from the "Sign Tests" quiz.)
 
-### Summary
+## Summary
 State whether you used the Bonferroni correction, and explain why or why not. If there are any discrepancies between the effect size hypothesis tests and the sign tests, describe the discrepancy and why you think it arose.
 
-### Recommendation
+## Recommendation
 Make a recommendation and briefly describe your reasoning.
 
-### Follow-Up Experiment
+## Follow-Up Experiment
 Give a high-level description of the follow up experiment you would run, what your hypothesis would be, what metrics you would want to measure, what your unit of diversion would be, and your reasoning for these choices.
 
 
