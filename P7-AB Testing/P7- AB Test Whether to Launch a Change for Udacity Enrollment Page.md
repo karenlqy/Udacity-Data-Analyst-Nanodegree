@@ -45,12 +45,24 @@ Evaluation Metrics | Probability | Standard Deviation
  Retention | 0.53 | 0.05495
  Net Conversion | 0.10931 | 0.0156
  
- 
+ We expect gross conversion and net conversion to be comparable to empirical results since the unit of analysis is cookie based while retention is based on the enrollment event. 
 
 
 ### Sizing
 #### Number of Samples vs. Power
-Indicate whether you will use the Bonferroni correction during your analysis phase, and give the number of pageviews you will need to power you experiment appropriately. (These should be the answers from the "Calculating Number of Pageviews" quiz.)
+I decided not to use Bonferroni correction at this moment.
+
+To calculate the sample sized for each evaluation metrics, we use this ![online calculator](http://www.evanmiller.org/ab-testing/sample-size.html) and alpha=0.05, beta=0.2.
+
+Parameters| Gross Conversion | Retention | Net Conversion
+----------| -----------------|-----------|---------------
+Baseline Conversion| 0.20625 | 0.53 |0.10931
+Minimum Detectable Effect| 0.01| 0.01 | 0.0075
+alpha| 0.05 |0.05|0.05
+beta| 0.2 |0.2 |0.2
+sample size (each group) | 25,835| 39,087 |15,464
+Total sample size | 51,670 | 78,174 | 30928
+
 
 #### Duration vs. Exposure
 Indicate what fraction of traffic you would divert to this experiment and, given this, how many days you would need to run the experiment. (These should be the answers from the "Choosing Duration and Exposure" quiz.)
