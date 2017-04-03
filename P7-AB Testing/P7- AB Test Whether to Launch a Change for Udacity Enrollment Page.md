@@ -78,13 +78,48 @@ If we could eliminate retention and use gross conversion and net conversion as m
 ## Experiment Analysis
 ### Sanity Checks
 
+#### Invariant Metrics:
+
+Dataset|Total Pageviews | Total Clicks | Enrollments |Payments
+-------|----------------|--------------|-------------|--------
+Test | 344,660 | 28,325 |3,423 | 1,945
+Control | 345,543| 28,378 | 3,785| 2,033
+
+- Number of Cookies:
+Observed = 345543/(344660+345543) = 0.5006
+SE = sqrt(0.5006\*(1-0.5006)/(345543+344660)) = 0.0006018
+CI Lower Bound= 0.5006-1.96\*SE = 0.4994
+CI Upper Bound = 0.5006+1.96\*SE= 0.5018
+
+- Number of Clicks:
+Observed = 28378/(28325+28378) = 0.5004
+SE = sqrt(0.5004\*(1-0.5004)/(28325+28378)) = 0.0020998
+CI Lower Bound = 0.5004 - 1.96\*SE = 0.4963
+CI Upper Bound = 0.5004 + 1.96\*SE = 0.5045
+
+- Click-through probability: 
+Observed = 28378/345543=0.08212
+SE = sqrt(0.08212\*(1-0.08212)/(345543+344660)) =0.00033
+CI Lower Bound = 0.08212-1.96\*SE = 0.0815
+CI Upper Bound = 0.08212+1.96\*SE = 0.0828
+
+Metric | Expected Value | Empirical Result |CI| Check Result
+-------| ---------------| -----------------|--|----------------
+Number of Cookies | 0.5 | 0.5006 | (0.4994,0.5018) | Pass
+Number of Clicks | 0.5 | 0.5004 | (0.4963,0.5045)|Pass
+Click-through Probability | 0.08 | 0.0821 |(0.0815,0.0828)| Pass
+
+
+
 
 ## Result Analysis
+
 ### Effect Size Tests
 For each of your evaluation metrics, give a 95% confidence interval around the difference between the experiment and control groups. Indicate whether each metric is statistically and practically significant. (These should be the answers from the "Effect Size Tests" quiz.)
 
 ### Sign Tests
 For each of your evaluation metrics, do a sign test using the day-by-day data, and report the p-value of the sign test and whether the result is statistically significant. (These should be the answers from the "Sign Tests" quiz.)
+
 
 ## Summary
 State whether you used the Bonferroni correction, and explain why or why not. If there are any discrepancies between the effect size hypothesis tests and the sign tests, describe the discrepancy and why you think it arose.
