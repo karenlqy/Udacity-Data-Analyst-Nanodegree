@@ -86,31 +86,35 @@ Test | 344,660 | 28,325 |3,423 | 1,945
 Control | 345,543| 28,378 | 3,785| 2,033
 
 - Number of Cookies:
+
 Observed = 345543/(344660+345543) = 0.5006
 
 SE = sqrt(0.5006\*(1-0.5006)/(345543+344660)) = 0.0006018
 
-CI Lower Bound= 0.5006-1.96\*SE = 0.4994
+CI Lower Bound= 0.5006-1.96\*SE = 0.4988
 
-CI Upper Bound = 0.5006+1.96\*SE= 0.5018
+CI Upper Bound = 0.5006+1.96\*SE= 0.5012
 
 - Number of Clicks:
+
 Observed = 28378/(28325+28378) = 0.5004
 
 SE = sqrt(0.5004\*(1-0.5004)/(28325+28378)) = 0.0020998
 
-CI Lower Bound = 0.5004 - 1.96\*SE = 0.4963
+CI Lower Bound = 0.5004 - 1.96\*SE = 0.4959
 
-CI Upper Bound = 0.5004 + 1.96\*SE = 0.5045
+CI Upper Bound = 0.5004 + 1.96\*SE = 0.5041
 
 - Click-through probability: 
+
 Observed = 28378/345543=0.08212
 SE = sqrt(0.08212\*(1-0.08212)/(345543+344660)) =0.00033
 
-CI Lower Bound = 0.08212-1.96\*SE = 0.0815
+CI Lower Bound = 0.08212-1.96\*SE = 0.0812
 
-CI Upper Bound = 0.08212+1.96\*SE = 0.0828
+CI Upper Bound = 0.08212+1.96\*SE = 0.0830
 
+Summarize the calculated numbers in the following table:
 
 Metric | Expected Value | Empirical Result |CI| Check Result
 -------| ---------------| -----------------|--|----------------
@@ -118,13 +122,25 @@ Number of Cookies | 0.5 | 0.5006 | (0.4994,0.5018) | Pass
 Number of Clicks | 0.5 | 0.5004 | (0.4963,0.5045)|Pass
 Click-through Probability | 0.08 | 0.0821 |(0.0815,0.0828)| Pass
 
-### Evaluation Metrics
-
 
 ## Result Analysis
 
 ### Effect Size Tests
-For each of your evaluation metrics, give a 95% confidence interval around the difference between the experiment and control groups. Indicate whether each metric is statistically and practically significant. (These should be the answers from the "Effect Size Tests" quiz.)
+
+Dataset|Total Pageviews | Total Clicks | Enrollments |Payments
+-------|----------------|--------------|-------------|--------
+Test | 344,660 | 28,325 |3,423 | 1,945
+Control | 345,543| 28,378 | 3,785| 2,033
+
+- Gross Conversion: The number of user-ids to complete checkout and enroll in the free trial divided by number of unique cookies to click the "Start free trial" button.
+
+p_pooled = (3423+3785)/(28325+28378) = 0.1271
+SE = sqrt(0.1271\*(1-0.1271)/(28325+28378)) = 0.001399
+
+
+- Net Conversion: The number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the "Start free trial" button. 
+
+
 
 ### Sign Tests
 For each of your evaluation metrics, do a sign test using the day-by-day data, and report the p-value of the sign test and whether the result is statistically significant. (These should be the answers from the "Sign Tests" quiz.)
