@@ -87,21 +87,30 @@ Control | 345,543| 28,378 | 3,785| 2,033
 
 - Number of Cookies:
 Observed = 345543/(344660+345543) = 0.5006
+
 SE = sqrt(0.5006\*(1-0.5006)/(345543+344660)) = 0.0006018
+
 CI Lower Bound= 0.5006-1.96\*SE = 0.4994
+
 CI Upper Bound = 0.5006+1.96\*SE= 0.5018
 
 - Number of Clicks:
 Observed = 28378/(28325+28378) = 0.5004
+
 SE = sqrt(0.5004\*(1-0.5004)/(28325+28378)) = 0.0020998
+
 CI Lower Bound = 0.5004 - 1.96\*SE = 0.4963
+
 CI Upper Bound = 0.5004 + 1.96\*SE = 0.5045
 
 - Click-through probability: 
 Observed = 28378/345543=0.08212
 SE = sqrt(0.08212\*(1-0.08212)/(345543+344660)) =0.00033
+
 CI Lower Bound = 0.08212-1.96\*SE = 0.0815
+
 CI Upper Bound = 0.08212+1.96\*SE = 0.0828
+
 
 Metric | Expected Value | Empirical Result |CI| Check Result
 -------| ---------------| -----------------|--|----------------
@@ -109,7 +118,7 @@ Number of Cookies | 0.5 | 0.5006 | (0.4994,0.5018) | Pass
 Number of Clicks | 0.5 | 0.5004 | (0.4963,0.5045)|Pass
 Click-through Probability | 0.08 | 0.0821 |(0.0815,0.0828)| Pass
 
-
+### Evaluation Metrics
 
 
 ## Result Analysis
