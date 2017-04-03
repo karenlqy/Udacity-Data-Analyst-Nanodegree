@@ -52,7 +52,7 @@ Evaluation Metrics | Probability | Standard Deviation
 #### Number of Samples vs. Power
 I decided not to use Bonferroni correction at this moment.
 
-To calculate the sample sized for each evaluation metrics, we use this ![online calculator](http://www.evanmiller.org/ab-testing/sample-size.html) and alpha=0.05, beta=0.2.
+To calculate the sample sized for each evaluation metrics, we use this online calculator(http://www.evanmiller.org/ab-testing/sample-size.html) and alpha=0.05, beta=0.2.
 
 Parameters| Gross Conversion | Retention | Net Conversion
 ----------| -----------------|-----------|---------------
@@ -60,20 +60,24 @@ Baseline Conversion| 0.20625 | 0.53 |0.10931
 Minimum Detectable Effect| 0.01| 0.01 | 0.0075
 alpha| 0.05 |0.05|0.05
 beta| 0.2 |0.2 |0.2
-sample size (each group) | 25,835| 39,087 |15,464
-Total sample size | 51,670 | 78,174 | 30928
+sample size (each group) | 25,835| 39,115 |27,413
+Total sample size | 51,670 | 78,230 | 54,826
 
+Page view for gross conversion = 51,670/0.08= 645,875
 
+Page view for retention = 78,230/(660/40,000) = 4,741,213
+
+Page view for net conversion =54,826 /0.08=685,325
+
+So total pageview needed for these metrics is 4,741,213. 
 #### Duration vs. Exposure
-Indicate what fraction of traffic you would divert to this experiment and, given this, how many days you would need to run the experiment. (These should be the answers from the "Choosing Duration and Exposure" quiz.)
+Since Udacity have 40,000 unique cookies to view page per day, we would need about 119 days to collect enough sample if we use 100% of  the traffice to collect data. This strategy would be very risky. If we direct 50% of the traffice for study, then it would take 238 days to collect enough sample and this is too long.
 
-Give your reasoning for the fraction you chose to divert. How risky do you think this experiment would be for Udacity?
+If we could eliminate retention and use gross conversion and net conversion as measurements, our sample pageview needed is down to 685,325. If we direct 100% traffic, then it would take about 17 days and if 50% of the traffic is directed then it would take about 35 days for data collection. Using 50% of traffic would be more appropriate in this case and test and control group would each have 25%.
 
 ## Experiment Analysis
-Sanity Checks
-For each of your invariant metrics, give the 95% confidence interval for the value you expect to observe, the actual observed value, and whether the metric passes your sanity check. (These should be the answers from the "Sanity Checks" quiz.)
+### Sanity Checks
 
-For any sanity check that did not pass, explain your best guess as to what went wrong based on the day-by-day data. Do not proceed to the rest of the analysis unless all sanity checks pass.
 
 ## Result Analysis
 ### Effect Size Tests
