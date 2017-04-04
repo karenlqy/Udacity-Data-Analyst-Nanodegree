@@ -108,6 +108,7 @@ CI Upper Bound = 0.5004 + 1.96\*SE = 0.5041
 - Click-through probability: 
 
 Observed = 28378/345543=0.08212
+
 SE = sqrt(0.08212\*(1-0.08212)/(345543+344660)) =0.00033
 
 CI Lower Bound = 0.08212-1.96\*SE = 0.0812
@@ -127,19 +128,41 @@ Click-through Probability | 0.08 | 0.0821 |(0.0815,0.0828)| Pass
 
 ### Effect Size Tests
 
+For the experiment data, since there are only 23 observations with complete data, we will summarize the data as follows:
+
 Dataset|Total Pageviews | Total Clicks | Enrollments |Payments
 -------|----------------|--------------|-------------|--------
-Test | 344,660 | 28,325 |3,423 | 1,945
-Control | 345,543| 28,378 | 3,785| 2,033
+Test | 211,362|	17,260|	3,423|	1,945
+Control | 212,163|	17,293|	3,785|	2,033
 
 - Gross Conversion: The number of user-ids to complete checkout and enroll in the free trial divided by number of unique cookies to click the "Start free trial" button.
 
-p_pooled = (3423+3785)/(28325+28378) = 0.1271
-SE = sqrt(0.1271\*(1-0.1271)/(28325+28378)) = 0.001399
+p_pooled = (3423+3785)/(17260+17293) = 0.2086071
+
+SE = sqrt(0.2086\*(1-0.2086)\*(1/17260+1/17293)) = 0.0043716
+
+d = 3423/17260-3785/17293 = -0.02055
+
+CI Lower Bound = -0.02055 - 1.96\*SE = -0.0291
+
+CI Upper Bound = -0.02055 + 1.96\*SE = -0.0120
+
+The confidence interval for gross conversion is (-0.0291,-0.0120), which does not cover 0 and does not cover the minimum detectable effect d_min=(-)0.01. So it is both statistically and practically significant.
 
 
 - Net Conversion: The number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the "Start free trial" button. 
 
+p_pooled = (1945+2033)/(17260+17293) = 0.1151
+
+SE = sqrt(0.1151\*(1-0.1151)\*(1/17260+1/17293)) = 0.003433
+
+d = 1945/17260-2033/17293 = -0.00487
+
+CI Lower Bound = -0.00487 - 1.96\*SE = -0.0116
+
+CI Upper Bound = -0.00487 + 1.96\*SE = 0.0018
+
+The confidence inverval for net conversion is (-0.0116, 0.0018). Since it covers 0, it is not statistically significant. The minimum detectable effect is d_min=0.0075, which falls within the confidence interval. Thus the confidence interval is not practically significant.
 
 
 ### Sign Tests
