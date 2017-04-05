@@ -190,6 +190,5 @@ From the results above, we can see statistically and practically significant in 
 
 
 ## Follow-Up Experiment
-Give a high-level description of the follow up experiment you would run, what your hypothesis would be, what metrics you would want to measure, what your unit of diversion would be, and your reasoning for these choices.
 
 
