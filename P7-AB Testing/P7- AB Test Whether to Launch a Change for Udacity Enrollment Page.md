@@ -70,6 +70,7 @@ Page view for retention = 78,230/(660/40,000) = 4,741,213
 Page view for net conversion =54,826 /0.08=685,325
 
 So total pageview needed for these metrics is 4,741,213. 
+
 #### Duration vs. Exposure
 Since Udacity have 40,000 unique cookies to view page per day, we would need about 119 days to collect enough sample if we use 100% of  the traffice to collect data. This strategy would be very risky. If we direct 50% of the traffice for study, then it would take 238 days to collect enough sample and this is too long.
 
@@ -166,14 +167,27 @@ The confidence inverval for net conversion is (-0.0116, 0.0018). Since it covers
 
 
 ### Sign Tests
-For each of your evaluation metrics, do a sign test using the day-by-day data, and report the p-value of the sign test and whether the result is statistically significant. (These should be the answers from the "Sign Tests" quiz.)
+
+we read the data into R and calculated the following results:
+
+Metric | P-value | Statistically significant
+-------| --------|--------------------------
+Gross Conversion|0.0026 | Statistically Significant
+Net Conversion|0.6776 | Not Statistically Significant
 
 
 ## Summary
-State whether you used the Bonferroni correction, and explain why or why not. If there are any discrepancies between the effect size hypothesis tests and the sign tests, describe the discrepancy and why you think it arose.
+
+In this report, we explored the experiment conducted at udacity to decide whether to launch a screening page during course enrollment process. We first determined that number of cookies, number of clicks, and the click-through probability are invariant metrics of our study and gross conversion, retention, and net conversion are evaluatoin metrics for this study. We calculated the sample sizes for each evaluation metrics and the study length needed to colloect sample to have enough statistical power. But the sample size required by retention is too big that the experiment length would be too long to have enough sample so we decided to remove it from the evaluation metrics.
+
+After the metrics are chosen, we conducted sanity checks to ensure the invariant metrics are similar across two groups and all three metrics pass the sanity checks. Next, we conducted paired t-tests and sign tests to check the statistical significance of the two evaluation metrics. The null hypothesis is that there is no difference between experiment and control groups for each evaluation metrics. We reject the null is p-value is smaller than 0.05. We found that, with 95% of confidence, gross conversion there are both statistically and practically significant difference between the experiment and control group. However, for net conversion, it is neither a statistically significant nor a practically significant metric at 95% confidence level.
+
+During the exploration, we did not use the Bonferroni Correction. Boferroni correction is employed when conducting multiple testing to control family wise error rate or false positive rate. But since there are positive correlation within the sample variables, using Bonferroni Correction would make the tests being too conservative. 
 
 ## Recommendation
-Make a recommendation and briefly describe your reasoning.
+
+From the results above, we can see statistically and practically significant in gross conversion but not so for net conversion. This translates to decreases in enrollment but the proportion of students paying to stay for the service did not increase. I would recommend not to launch this screener at this moment. 
+
 
 ## Follow-Up Experiment
 Give a high-level description of the follow up experiment you would run, what your hypothesis would be, what metrics you would want to measure, what your unit of diversion would be, and your reasoning for these choices.
