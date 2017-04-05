@@ -191,4 +191,22 @@ From the results above, we can see statistically and practically significant in 
 
 ## Follow-Up Experiment
 
+The "5 hour per week" screen maybe a good way to screen out less motivated students and impove the active level of registered students, it may also have the psycological effect that may deter some students away. When a student is not sure if they can spend that much time per week dedicated to study, seeing the screen may discourage them from enroll for the trial and stay for the future. On the contrary, even after answering "Yes" to the screener, students who overestimated their available time to study (and I believe there are a lot of people do) may still cancel during the free trial. 
+
+For the follow-up experiment, I propose first to track the student's active level during the first week of the free trial period and conduct an experiment for the non-active group. To determin if a student is active or not, we can monitor their log-in activities of their user-id and calculate the number of mintes they spend in classrooms. If a student logs in 3 days out of the first week and spend an average of 1 hour studying, then we can mark him/her as active student and otherwise non-active student. For active students, they are well motivated and I believe their net conversion rate will be high. We should think about testing ways to motivate non-active students. 
+
+Setup: We divide non-active students into experiment and control group evenly. For the experiment group, udacity would send out study reminders, checkups, past students' success stories, and articles with information/knowledge they may find useful and interesting to the course the students are enrolled. Students in control group did not receive these emails. 
+
+The hypothesis is that with these email reminders and activities, the net conversion rate for non-active students would increase.
+
+Unit of diversion: user-id. They will be tracked with their activity once the free-trial ends
+
+Invariant metrics: numer of cookies and user-id.
+
+Evaluation metric: retention rate, which is the number of user ids that remain after the free trial period divided by the total number of user ids enrolled in the free trial and was not active for the first week of the trial period. An statistically and practically significant confidence interval would prove this change is successful in retaining less motivated students in the course.
+
+
+
+
+
 
