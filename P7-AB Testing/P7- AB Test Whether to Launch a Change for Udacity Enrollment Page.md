@@ -183,7 +183,7 @@ CI Lower Bound = -0.00487 - 1.96\*SE = -0.0116
 
 CI Upper Bound = -0.00487 + 1.96\*SE = 0.0018
 
-The confidence inverval for net conversion is (-0.0116, 0.0018). Since it covers 0, it is not statistically significant. The minimum detectable effect is d_min=0.0075, which falls within the confidence interval. Thus the confidence interval is not practically significant.
+The confidence inverval for net conversion is (-0.0116, 0.0018). Since it covers 0, it is not statistically significant. The minimum detectable effect is d_min=0.0075, which falls within the confidence interval. Thus the confidence interval is practically significant.
 
 
 ### Sign Tests
@@ -202,11 +202,11 @@ In this report, we explored the experiment conducted at udacity to decide whethe
 
 After the metrics are chosen, we conducted sanity checks to ensure the invariant metrics are similar across two groups and all three metrics pass the sanity checks. Next, we conducted paired t-tests and sign tests to check the statistical significance of the two evaluation metrics. The null hypothesis is that there is no difference between experiment and control groups for each evaluation metrics. We reject the null is p-value is smaller than 0.05. We found that, with 95% of confidence, gross conversion there are both statistically and practically significant difference between the experiment and control group. However, for net conversion, it is neither a statistically significant nor a practically significant metric at 95% confidence level.
 
-During the exploration, we did not use the Bonferroni Correction. Boferroni correction is employed when conducting multiple testing to control family wise error rate or false positive rate. But since there are positive correlation within the sample variables, using Bonferroni Correction would make the tests being too conservative. 
+During the exploration, we did not use the Bonferroni Correction. Boferroni correction is employed when conducting multiple testing to control false positive rate(Type I error) when we would like any null hypothesis of the all the tests we are conducting to be rejected. In this udacity experiment, in order to launch this 5 hour screener during students' enrollment process, we will need both gross conversion and net conversion experiment results to meet our expection (i.e. to have small enough p-value to reject the null hypothesis that the two conversion rates are similar between test and contol). In this case, the rate for making a type II error would increase but we should not need to worry about correcting type I error. 
 
 ## Recommendation
 
-From the results above, we can see statistically and practically significant in gross conversion but not so for net conversion. This translates to decreases in enrollment but the proportion of students paying to stay for the service did not increase. I would recommend not to launch this screener at this moment. 
+From the results above, we can see statistically and practically significant in gross conversion. Since the confidence interval contains the lower level of d_min=-0.0075, it is practically significant. This means that the net conversion for experiment group goes down at a percentage that may be significant to company's business. Since we do not want to significantly reduce the number of students who continue to stay past free trial period and complete the course, I would recommend not to launch this screener at this moment. 
 
 
 ## Follow-Up Experiment
@@ -221,9 +221,9 @@ The hypothesis is that with these email reminders and activities, the net conver
 
 Unit of diversion: user-id. They will be tracked with their activity once the free-trial ends
 
-Invariant metrics: numer of cookies and user-id.
+Invariant metrics: user_id.
 
-Evaluation metric: retention rate, which is the number of user ids that remain after the free trial period divided by the total number of user ids enrolled in the free trial and was not active for the first week of the trial period. An statistically and practically significant confidence interval would prove this change is successful in retaining less motivated students in the course.
+Evaluation metric: retention rate, which is the number of user ids that remain after the free trial period divided by the total number of user ids enrolled in the free trial and was not active for the first week of the trial period. We would expect more students of the experiment group continue to study beyond the free trial period.
 
 
 
