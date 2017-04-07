@@ -40,14 +40,13 @@ We expect retention rate to increase for testing group. With similar visitors en
 
 - Net Conversion: The number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the "Start free trial" button. 
 
-We expect net conversion to increase for the testing group with less students to cancel past the free trial period and more stay enrolled.
+We expect net conversion to not decrease for the testing group with less students to cancel past the free trial period and more stay enrolled. That is, if the net conversion of experiment group remains similar to that of the control group, or if the net conversion of experiment group increase we would consider the experiment successful.
 
 #### Metric not chosen
 
 - User ID: the number of user-ids enrolled in the course
 
-User-id is not chosen as a invariant metric because the number of user-id would change when students see the 5 hour per week screen before enrolling. It is not an evaluation metric because the number of enrolled users very from day to day and it does not provide an
-
+User-id is not chosen as a invariant metric because the number of user-id would change when students see the 5 hour per week screen before enrolling. It is not chosen as an evaluation metric because the number of enrolled users is a count that veries from day to day. I think this does not provide enough useful information.
 
 
 ### Measuring Standard Deviation
@@ -89,9 +88,13 @@ Page view for net conversion =54,826 /0.08=685,325
 So total pageview needed for these metrics is 4,741,213. 
 
 #### Duration vs. Exposure
+
 Since Udacity have 40,000 unique cookies to view page per day, we would need about 119 days to collect enough sample if we use 100% of  the traffice to collect data. This strategy would be very risky. If we direct 50% of the traffice for study, then it would take 238 days to collect enough sample and this is too long.
 
-If we could eliminate retention and use gross conversion and net conversion as measurements, our sample pageview needed is down to 685,325. If we direct 100% traffic, then it would take about 17 days and if 50% of the traffic is directed then it would take about 35 days for data collection. Using 50% of traffic would be more appropriate in this case and test and control group would each have 25%.
+If we could eliminate retention and use gross conversion and net conversion as measurements, our sample pageview needed is down to 685,325. If we direct 100% traffic, then it would take about 18 days and if 50% of the traffic is directed then it would take about 35 days for data collection. 
+
+Since our experiment only collects log-ins, enrollment activities, and payment activities, and these do not involve sensitive information such as disease history, our experiment is safe and we could direct 100% of the traffice towards this study and it will take 18 days for data collection.
+
 
 ## Experiment Analysis
 ### Sanity Checks
