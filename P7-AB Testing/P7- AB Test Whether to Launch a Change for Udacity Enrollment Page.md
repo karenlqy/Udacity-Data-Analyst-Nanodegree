@@ -14,23 +14,40 @@ The unit of diversion is a cookie, although if the student enrolls in the free t
 First we need to determine the metrics to measure and their expected results.
 
 #### Invariant metrics
-Invariant metrics are variables that are tend to have big difference between the test and control group.
+Invariant metrics are variables that are not tend to have big difference between the test and control group.Thus these metrics should be the same for case and control group.
+
 - Number of cookies: The number of unique cookies to view the course overview page.
+
+Since visitors viewed the course overview page before enrollment and seeing the screener, the number of cookies should not been affected here.
+
 - Number of clicks: The number of users who enroll in the free trial.
+
+Since students click the "Start free trial" button before seeing the 5-hour/week screener, the number of clicks for both control and test group should be the same.
+
 - Click through probabiliy: The number of unique cookies to click the "Start free trial" button divided by number of unique cookies to view the course overview page. 
 
-Since visitors of the website did not view the screen asking if they can spend at least 5 hours per week at this point, these variables should not be affected by adding the screener. Thus these metrics should be the same for case and control group.
+Since students click the "Start free trial" button before seeing the 5-hour/week screener, the click through probability for both control and test group should be the same.
 
 #### Evaluation metrics
 - Gross Conversion: The number of user-ids to complete checkout and enroll in the free trial divided by number of unique cookies to click the "Start free trial" button.
-- Retention: The number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by number of user-ids to complete checkout.
-- Net Conversion: The number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the "Start free trial" button. 
 
 We expect gross conversion rate to be lower for testing group. With number of clicks be the same across groups, we expect the number of user-ids to decrease when the screening page eliminate visitors who cannot study enough time every week and potentially cancel the service. 
 
+- Retention: The number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by number of user-ids to complete checkout.
+
 We expect retention rate to increase for testing group. With similar visitors enrolled in free trial in the test and control group, the screening page will likely to filter out students who are more likely to cancel in the future and thus increase the retention rate.
 
+
+- Net Conversion: The number of user-ids to remain enrolled past the 14-day boundary (and thus make at least one payment) divided by the number of unique cookies to click the "Start free trial" button. 
+
 We expect net conversion to increase for the testing group with less students to cancel past the free trial period and more stay enrolled.
+
+#### Metric not chosen
+
+- User ID: the number of user-ids enrolled in the course
+
+User-id is not chosen as a invariant metric because the number of user-id would change when students see the 5 hour per week screen before enrolling. It is not an evaluation metric because the number of enrolled users very from day to day and it does not provide an
+
 
 
 ### Measuring Standard Deviation
