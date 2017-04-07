@@ -226,6 +226,8 @@ Invariant metrics: user_id.
 Evaluation metric: retention rate, which is the number of user ids that remain after the free trial period divided by the total number of user ids enrolled in the free trial and was not active for the first week of the trial period. We would expect more students of the experiment group continue to study beyond the free trial period.
 
 
+## Reference
+http://www.stat.berkeley.edu/~mgoldman/Section0402.pdf
 
 
 
