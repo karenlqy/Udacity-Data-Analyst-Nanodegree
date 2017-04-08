@@ -46,7 +46,7 @@ We expect net conversion to not decrease for the testing group with less student
 
 - User ID: the number of user-ids enrolled in the course
 
-User-id is not chosen as a invariant metric because the number of user-id would change when students see the 5 hour per week screen before enrolling. It is not chosen as an evaluation metric because the number of enrolled users is a count that veries from day to day. I think this does not provide enough useful information.
+User-id is not chosen as a invariant metric because the number of user-id would change when students see the 5 hour per week screen before enrolling. It is not chosen as an evaluation metric because the number of enrolled users is a count variable that is not normalized. For metric based on user ID, gross conversion is better choice. 
 
 
 ### Measuring Standard Deviation
@@ -206,7 +206,7 @@ During the exploration, we did not use the Bonferroni Correction. Boferroni corr
 
 ## Recommendation
 
-From the results above, we can see statistically and practically significant in gross conversion. Since the confidence interval contains the lower level of d_min=-0.0075, it is practically significant. This means that the net conversion for experiment group goes down at a percentage that may be significant to company's business. Since we do not want to significantly reduce the number of students who continue to stay past free trial period and complete the course, I would recommend not to launch this screener at this moment. 
+From the results above, we can see statistically and practically significant in gross conversion. Net conversion is not statistically significant between the two groups but the confidence interval contains the practically significance boundary. This means that net conversion might go down at a percentage that significantly affect the business. If we conduct the experiment with more power, then there might be a chance that net conversion is also statistically significant. But based on the result of this experiment, I would recommend not to launch this screener at this moment. 
 
 
 ## Follow-Up Experiment
