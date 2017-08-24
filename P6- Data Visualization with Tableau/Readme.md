@@ -17,6 +17,15 @@ In this project, I'm interested to see which airport has highest average delay a
 
 ## Design
 
+- Card 1:  I would like to visually show the arrival delay for continental US. So I thought a map with circle size representing the delay time would be a good way to visually tell reader where are the most delays occur.
+
+- Card 2: This card was not originally included in the story. But one of the feedback mentioned that there are gap between card 1 and card 2 so I added a card between these two and show a bar plot of the average arrival delay in minutes so that reader understands how I chose the five airports in card 3.
+
+- Card 3: In this plot, there are five big columns for each airport. And then in each airport, I added the delay categories: weather, security, and carrier. I think in this design, we can not only compare across airports, but also compare the delay categories within each airport
+
+- Card 4:
+
 ## Feedback
+
 
 ## Resources
