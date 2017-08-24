@@ -1,5 +1,5 @@
 # Udacity DAND P6 Data Visualization with Tableau Write Up
-### Qingyu Li  Aug. 23 2017 
+### Qingyu Li  Aug. 23 2017  Project link is [here](https://public.tableau.com/profile/qingyu.li#!/vizhome/AirTravelDelayStudy-DANDTableauClassProject/Story1?publish=yes)
 
 ## Background
 I'm traveling out of Chicago O'Hare frequently and I am interested in studying the flight delay data for US in 2016. The data is downloaded from Bureau of Transportation Statistics website [RITA](https://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp) database. 
