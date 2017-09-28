@@ -118,3 +118,20 @@ audit_post(OSMFILE)
 ```sql
 sqlite> SELECT COUNT(*) FROM nodes;
 ```
+
+```sql
+
+```
+
+```sql
+
+```
+```sql
+
+```
+```sql
+
+```
+```sql
+
+```
