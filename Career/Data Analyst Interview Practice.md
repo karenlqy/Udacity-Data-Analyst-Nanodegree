@@ -1,4 +1,4 @@
-### 1. escribe a data project you worked on recently.
+### 1. Describe a data project you worked on recently.
 
 I worked on a project from udacity class to study the financial and email data from Enron which is a dataset of 146 records of the senior management's financial and email data. In this project, I need to build a predictive model that can identify an individual as a "Person of Interest" (POI) that requires further analysis. I used the scikit-learn package & various machine learning techniques for this exercise.
 
