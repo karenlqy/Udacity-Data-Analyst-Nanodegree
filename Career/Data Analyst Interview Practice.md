@@ -20,7 +20,10 @@ If you were given an identical box of chocolates and again eat four pieces in a 
 
 From the four pieces, we would like to find the probability of two having coconut filling.
 
-P(two pieces have coconut filling)=$\frac{{4 \choose 2}}{{4 \choose 0}+{4 \choose 1}+{4 \choose 2} + {4 \choose 3} + {4 \choose 4}}$
+number of ways where there are exactly two pieces have coconut filling = 6
+number of all possible flavors = 16
+So P(exactly two contain coconut filling)=6/16
+
 ### 3. Construct a query to find the top 5 states with the highest number of active users. Include the number for each state in the query result.
 ```sqlite
 select sum(active) as num_active_user, state
@@ -54,7 +57,14 @@ def first_unique(string):
 ```
 
 ### 5. What are underfitting and overfitting in the context of Machine Learning? How might you balance them?
-Overfitting is when the model fits the data perfectly. The issue with overfitting is that when we test the model on another testing dataset, the prediction error might be very large. On the other hand, underfitting is when the model does not capture the data trends shown in the data. We can identify underfitting issue when the model shows low variance but high bias. To balance overfitting and underfitting, we can use resampling method of the training data to estimate the model accuracy, such as the k-fold validation method. We also need to hold a separate testing dataset to check if the model fits well on the testing data.
+Overfitting is when the model fits the data perfectly. Meaning the model maybe too complicated that cannot be generalised to new data. When we test the model on another testing dataset, the prediction error might be very large. On the other hand, underfitting is when the model does not capture the data trends shown in the data. So the predicting power of the model is not very well.
+
+To balance overfitting and underfitting, we can use following strategies:
+  1. Cross-validation: Split the whole dataset into training and testing set. Then use methods such as the k-fold validation in the training set for model building. Testing data is to check if the model fits well on a separate data to prevent overfitting.
+  2. Increase sample size for model building. If existing sample size is really small, try resampling method of the training data 
+  3. To address overfitting, we can check the features and try the simplest model and control the number of features included in the model
+  4. To solve overfitting issue, we can also consider regularization methods, which introduce a penalty term to penalize adding too many features in the model. Reguarization methods generally used are Lasso and Ridge. Lasso uses a L1 penalty function and ridge uses a L2 penalty function. The benefit with Lasso is that it also will shrink the coefficients of not important features to zero.
+  5. Another option is to use an ensemble methods such as random forests. This algorithm will randomly select a set of features and build a decision tree and repeat the process many times. The final set of features selected are the ones that are voted important from most of the trees built. Then using the selected set of features, we can build a better model.
 
 ### 6. If you were to start your data analyst position today, what would be your goals a year from now?
 I would like to apply to this position: https://www.kaggle.com/jobs/18070/capital-one-data-scientist-post-graduate-programme-nottingham
