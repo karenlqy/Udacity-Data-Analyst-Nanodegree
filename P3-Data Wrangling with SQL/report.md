@@ -64,6 +64,15 @@ for st_type, ways in st_types.iteritems():
         better_name = update_name(name, mapping)
     print name, "=>", better_name
 ```
+Output:
+
+```python
+White Horse => White Horse
+Redstone Ridge => Redstone Ridge
+1 Brookline BlvdHavertown, PA 19083(610) 446-1234 => 1 Brookline BlvdHavertown
+Market Street; Pennsylvania Route 452 => Market Street
+Hillcrest Heights => Hillcrest Heights
+```
 White Horse => White Horse
 Redstone Ridge => Redstone Ridge
 1 Brookline BlvdHavertown, PA 19083(610) 446-1234 => 1 Brookline BlvdHavertown
@@ -106,10 +115,10 @@ audit_post(OSMFILE)
 |Philadelphia_pennsylvania.osm  |  737.1 MB       |
 |philadelphia.db                |  531.4 MB       |
 |nodes.csv                      |  274.8 MB       |
-|nodes_tags.csv                 |  20.2 MB        |
+|nodes_tags.csv                 |  1.2 MB        |
 |ways_nodes.csv                 |  94.6 MB        |
 |ways.csv                       |  20.6 MB        |
-|ways_tags.csv                  |  54.1 MB        |
+|ways_tags.csv                  |  320 KB        |
 
 
 
