@@ -73,11 +73,6 @@ Redstone Ridge => Redstone Ridge
 Market Street; Pennsylvania Route 452 => Market Street
 Hillcrest Heights => Hillcrest Heights
 ```
-White Horse => White Horse
-Redstone Ridge => Redstone Ridge
-1 Brookline BlvdHavertown, PA 19083(610) 446-1234 => 1 Brookline BlvdHavertown
-Market Street; Pennsylvania Route 452 => Market Street
-Hillcrest Heights => Hillcrest Heights
 
 Here we can see that all the issue with street names are updated.
 
@@ -127,20 +122,54 @@ audit_post(OSMFILE)
 ```sql
 sqlite> SELECT COUNT(*) FROM nodes;
 ```
+Number of nodes:  3289070
 
 ```sql
-
+SELECT COUNT(*) FROM ways
 ```
+Number of ways:  343066
 
 ```sql
-
+SELECT COUNT(DISTINCT(e.uid)) \
+            FROM (SELECT uid FROM nodes UNION ALL SELECT uid FROM ways) e
 ```
+
+Number of unique users:  2340
+
 ```sql
-
+SELECT value, COUNT(*) as num \
+            FROM nodes_tags \
+            WHERE key="amenity" \
+            GROUP BY value \
+            ORDER BY num DESC \
+            LIMIT 10
 ```
+
+
 ```sql
-
+SELECT nodes_tags.value, COUNT(*) as num \
+            FROM nodes_tags \
+                JOIN (SELECT DISTINCT(id) FROM nodes_tags WHERE value="restaurant") i \
+                ON nodes_tags.id=i.id \
+            WHERE nodes_tags.key="cuisine" \
+            GROUP BY nodes_tags.value \
+            ORDER BY num DESC\
+            LIMIT 10
 ```
-```sql
 
-```
+We can see that the cuisine people like the most in Philadelphia is pizza, next is italian and the third is chinese food.
+
+### Conclusion
+The OpenStreetMap data of Philadelphia is of good quality. We found some typos in street spelling and some address contain city and state names as well as inconsistency in abbreviations in the street type. We spent a significant amount of time checking different fields and cleaning the dataset. However, there are still a lot of extra work needed to improve the data quality of this extract.
+
+#### Suggestions for standardizing street names and control typos:
+- We can work on some preset rules for data imput. Preset the common names selection, such as "Street", "Place", "Lane", "Pike", "Parkway", etc.
+- We can develop a function to automatically clean the data periodically. This may be tedious at first, but with all data imput well controlled and database well maintained, the database will be easier to use and users do not need to spend a lot of time working on data cleaning.
+### Files
+- Philadelphia_pennsylvania.osm: data downloaded from the OpenStreetMap project
+- audit.py: audit and update street names
+- data.py: parse and shape the osm data and create CSV files from OSM dataset
+- dbwrite.py: read in the CSV files and create sql database
+- mapparser.py: find unique tags in the data
+- query.py: data exploration using sqlite
+
