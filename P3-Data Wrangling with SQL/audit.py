@@ -1,4 +1,4 @@
-"""
+n"""
 Your task in this exercise has two steps:
 
 - audit the OSMFILE and change the variable 'mapping' to reflect the changes needed to fix 
@@ -81,6 +81,7 @@ mapping = { "St": "Street",
             }
 
 
+
 def audit_street_type(street_types, street_name):
     m = street_type_re.search(street_name)
     if m:
@@ -93,8 +94,8 @@ def is_street_name(elem):
     return (elem.attrib['k'] == "addr:street")
 
 
-def audit(osmfile):
-    osm_file = open(osmfile, "r")
+def audit(OSM_PATH):
+    osm_file = open(OSM_PATH, "r")
     street_types = defaultdict(set)
     for event, elem in ET.iterparse(osm_file, events=("start",)):
 
@@ -105,14 +106,38 @@ def audit(osmfile):
     osm_file.close()
     return street_types
 
-
 def update_name(name, mapping):
-
-    # YOUR CODE HERE
-    m=street_type_re.search(name)
-    if m not in expected:
-        if m.group() in mapping.keys():
-            name = re.sub(m.group(), mapping[m.group()], name)
+    """takes an old name to mapping dictionary, and update to a new one"""
+    
+    m = street_type_re.search(name)
+    if m:
+        for a in mapping:
+            if a == m.group():
+                name = re.sub(street_type_re, mapping[a], name)
     name = re.split(",|#|-",name)[0]
     return name
 
+
+def is_postcode(elem):
+    """check if elem is a postcode"""
+    return (elem.attrib['k'] == "addr:postcode" or elem.attrib['k'] == "postal_code")
+
+def audit_postcode(postcodes, postcode):
+    """ Get a full list of entries about postcode """
+    postcodes[postcode].add(postcode)
+    return postcodes
+
+
+def update_postcode(postcode):
+    """Clean postcode to a uniform format of 5 digit; Return updated postcode"""
+    if re.findall(r'^\d{5}$', postcode): # 5 digits
+        valid_postcode = postcode
+        return valid_postcode
+    elif re.findall(r'(^\d{5})-\d{4}$', postcode): # 9 digits
+        valid_postcode = re.findall(r'(^\d{5})-\d{4}$', postcode)[0]
+        return valid_postcode
+    elif re.findall(r'PA\s*\d{5}', postcode): # with state code PA
+        valid_postcode =re.findall(r'\d{5}', postcode)[0]  
+        return valid_postcode  
+    else:
+        return None
