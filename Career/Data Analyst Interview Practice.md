@@ -21,8 +21,11 @@ If you were given an identical box of chocolates and again eat four pieces in a 
 From the four pieces, we would like to find the probability of two having coconut filling.
 
 number of ways where there are exactly two pieces have coconut filling = 6
-number of all possible flavors = 16
-So P(exactly two contain coconut filling)=6/16
+P(1st orange and 2nd orange and 3rd cocut and 4th coconut) = 6/10*5/9*4/8*3/7
+P(1st orange and 2nd coconut and 3rd orange and 4th coconut) = 6/10*4/9*5/8*3/7
+...
+
+So the total probability = ((6*5*4*3)/(10*9*8*7))*6 = 3/7
 
 ### 3. Construct a query to find the top 5 states with the highest number of active users. Include the number for each state in the query result.
 ```sqlite
