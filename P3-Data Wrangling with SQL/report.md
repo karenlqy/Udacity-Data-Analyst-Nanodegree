@@ -110,10 +110,10 @@ audit_post(OSMFILE)
 |Philadelphia_pennsylvania.osm  |  737.1 MB       |
 |philadelphia.db                |  531.4 MB       |
 |nodes.csv                      |  274.8 MB       |
-|nodes_tags.csv                 |  1.2 MB        |
+|nodes_tags.csv                 |  20.2 MB        |
 |ways_nodes.csv                 |  94.6 MB        |
 |ways.csv                       |  20.6 MB        |
-|ways_tags.csv                  |  320 KB        |
+|ways_tags.csv                  |  54.1 MB        |
 
 
 
@@ -142,9 +142,9 @@ SELECT value, COUNT(*) as num \
             WHERE key="amenity" \
             GROUP BY value \
             ORDER BY num DESC \
-            LIMIT 10
+            LIMIT 1
 ```
-
+Common ammenities:  (u'school', 1613)
 
 ```sql
 SELECT nodes_tags.value, COUNT(*) as num \
@@ -154,10 +154,11 @@ SELECT nodes_tags.value, COUNT(*) as num \
             WHERE nodes_tags.key="cuisine" \
             GROUP BY nodes_tags.value \
             ORDER BY num DESC\
-            LIMIT 10
+            LIMIT 1
 ```
+Popular cuisines:  (u'pizza', 119)
 
-We can see that the cuisine people like the most in Philadelphia is pizza, next is italian and the third is chinese food.
+We can see that the cuisine people like the most in Philadelphia is pizza.
 
 ### Conclusion
 The OpenStreetMap data of Philadelphia is of good quality. We found some typos in street spelling and some address contain city and state names as well as inconsistency in abbreviations in the street type. We spent a significant amount of time checking different fields and cleaning the dataset. However, there are still a lot of extra work needed to improve the data quality of this extract.
